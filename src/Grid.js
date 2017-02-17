@@ -7,8 +7,8 @@ export default class Grid {
     this._$window = $(config.window);
     this._maxRatio = config.maxRatio;
 
+    this._bind();
     this._setGridData();
-
     this._autoSizeGrid();
   }
 

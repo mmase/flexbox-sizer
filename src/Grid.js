@@ -75,9 +75,11 @@ export default class Grid {
         $container.css({
           display: 'block',
           height: rowHeight,
+          left: x + 'px',
           overflow: 'hidden',
           position: 'absolute',
-          transform: 'translate3d(' + x + 'px, ' + y + 'px, 0px)',
+          top: y + 'px',
+          // transform: 'translate3d(' + x + 'px, ' + y + 'px, 0px)',
           width: imageWidth,
         });
 
@@ -93,7 +95,7 @@ export default class Grid {
       y += rowHeight;
     });
 
-    this._$grid.addClass('grid--ready').height(y).css('margin', 0);
+    this._$grid.addClass('grid--ready').height(y);
   }
 
   _disableFlexbox() {

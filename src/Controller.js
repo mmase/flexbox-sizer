@@ -9,11 +9,11 @@ export default class Controller {
   }
 
   destroy() {
-    this._grids.forEach((grid) => grid.destroy());
+    this.grids.forEach((grid) => grid.destroy());
   }
 
   _create(config) {
-    this._grids = this._$grids.toArray().map((el, index) => new Grid($(el), index, config));
+    this.grids = this._$grids.toArray().map((el, index) => new Grid($(el), index, config));
   }
 
   static init(config) {

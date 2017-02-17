@@ -10,6 +10,7 @@ export default class Grid {
     this._setGridData();
 
     this._autoSizeGrid();
+    this._bind();
   }
 
   destroy() {

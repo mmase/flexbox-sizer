@@ -21,6 +21,7 @@ export default class Controller {
       context: document.body,
       gridSelector: '.js-grid-main',
       maxRatio: 1.5,
+      flexbox: false,
       breakpoints: [
         {
           width: 1024,

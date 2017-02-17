@@ -1,12 +1,14 @@
 import $ from 'jquery';
 
 export default class Grid {
-  constructor($grid, index, { window, maxRatio, breakpoints }) {
+  constructor($grid, index, { window, maxRatio, flexbox, breakpoints }) {
     this._$grid = $grid;
+    this._$gridItems = $grid.find('.js-grid-item-container');
     this._index = index;
     this._$window = $(window);
     this._maxRatio = maxRatio;
     this._breakpoints = breakpoints;
+    this._flexbox = flexbox;
 
     this.refresh();
     this._bind();
@@ -14,7 +16,13 @@ export default class Grid {
 
   refresh() {
     this._setGridData();
-    this._autoSizeGrid();
+    if (this._flexbox) {
+      this._autoSizeFlexGrid();
+    }
+    else {
+      this._disableFlexbox();
+      this._autoSizeStaticGrid();
+    }
   }
 
   destroy() {
@@ -22,7 +30,19 @@ export default class Grid {
   }
 
   _bind() {
-    this._$window.on('resize.grid-' + this._index, () => this._autoSizeGrid());
+    this._$window.on('resize.grid-' + this._index, () => {
+      if (this._flexbox) {
+        this._autoSizeFlexGrid();
+        return;
+      }
+      this._autoSizeStaticGrid();
+    });
+  }
+
+  _autoSizeFlexGrid() {
+    const gridWidth = this._$grid.width();
+
+    this._recalcFlexWidths(this._$grid, gridWidth);
   }
 
   _getBreakpointModifier(gridWidth) {
@@ -33,10 +53,51 @@ export default class Grid {
     return modifier;
   }
 
-  _autoSizeGrid() {
+  _autoSizeStaticGrid() {
+    const images = this._gridData;
     const gridWidth = this._$grid.width();
+    const flexModifier = this._getGridModifierData(images, gridWidth, this.maxModifier).flexModifier;
+    const gridDimensions = this._getGridDimensions(images, gridWidth, flexModifier);
+    const nonContentWidth = images[0].nonContentWidth;
 
-    this._recalcWidths(this._$grid, gridWidth);
+    let x = -nonContentWidth / 2;
+    let y = -nonContentWidth / 2;
+
+    gridDimensions.forEach((row, index) => {
+      const rowHeight = gridDimensions[index][0].height + nonContentWidth;
+
+      row.forEach((dimension) => {
+        const image = images[dimension.index];
+        const $container = image.$item;
+        const $image = $container.find('.js-grid__item-image');
+        const imageWidth = dimension.width - nonContentWidth;
+
+        $container.css({
+          display: 'block',
+          height: rowHeight,
+          overflow: 'hidden',
+          position: 'absolute',
+          transform: 'translate3d(' + x + 'px, ' + y + 'px, 0px)',
+          width: imageWidth,
+        });
+
+        $image.attr({
+          sizes: imageWidth + 'px',
+          'data-sizes': imageWidth + 'px',
+        });
+
+        x += imageWidth + nonContentWidth;
+      });
+
+      x = -nonContentWidth / 2;
+      y += rowHeight;
+    });
+
+    this._$grid.addClass('grid--ready').height(y).css('margin', 0);
+  }
+
+  _disableFlexbox() {
+    this._$grid.css('display', 'block');
   }
 
   _setGridData() {
@@ -46,7 +107,7 @@ export default class Grid {
   _getGridData($grid) {
     const images = [];
 
-    $grid.find('.js-grid-item-container').each(function() {
+    $grid.find('.js-grid-item-container').each((item, index) => {
       const $item = $(this);
       const height = $item.height();
       const width = $item.width();
@@ -55,7 +116,9 @@ export default class Grid {
       const flexWidth = $item.data('flex-grow');
       const flexHeight = Math.round(flexWidth * height / width);
 
+
       images.push({
+        index,
         $item,
         flexWidth,
         nonContentWidth,
@@ -66,7 +129,7 @@ export default class Grid {
     return images;
   }
 
-  _recalcWidths($grid, gridWidth) {
+  _recalcFlexWidths($grid, gridWidth) {
     const images = this._gridData;
     const maxModifier = 2;
     const maxFallbackRatio = 2.5;
@@ -155,6 +218,7 @@ export default class Grid {
           const height = image.modifiedFlexHeight * scaleRatio;
 
           rowDimensions.push({
+            index: image.index,
             width,
             height,
           });
@@ -179,6 +243,7 @@ export default class Grid {
       }
 
       currentRow.push({
+        index: image.index,
         modifiedFlexWidth,
         modifiedFlexHeight,
       });

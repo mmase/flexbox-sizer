@@ -3,7 +3,6 @@ import $ from 'jquery';
 export default class Grid {
   constructor($grid, index, { window, maxRatio, flexbox, breakpoints }) {
     this._$grid = $grid;
-    this._$gridItems = $grid.find('.js-grid-item-container');
     this._index = index;
     this._$window = $(window);
     this._maxRatio = maxRatio;
@@ -60,8 +59,8 @@ export default class Grid {
     const gridDimensions = this._getGridDimensions(images, gridWidth, flexModifier);
     const nonContentWidth = images[0].nonContentWidth;
 
-    let x = -nonContentWidth / 2;
-    let y = -nonContentWidth / 2;
+    let x = nonContentWidth / 2;
+    let y = nonContentWidth / 2;
 
     gridDimensions.forEach((row, index) => {
       const rowHeight = gridDimensions[index][0].height + nonContentWidth;
@@ -71,28 +70,30 @@ export default class Grid {
         const $container = image.$item;
         const $image = $container.find('.js-grid__item-image');
         const imageWidth = dimension.width - nonContentWidth;
+        const imageHeight = rowHeight - nonContentWidth;
+        const imageClass = 'grid-image-' + Math.random().toString(36).substring(7);
 
         $container.css({
           display: 'block',
           height: rowHeight,
-          left: x + 'px',
           overflow: 'hidden',
           position: 'absolute',
-          top: y + 'px',
-          // transform: 'translate3d(' + x + 'px, ' + y + 'px, 0px)',
+          transform: 'translate3d(' + x + 'px, ' + y + 'px, 0px)',
           width: imageWidth,
         });
 
         $image.attr({
           sizes: imageWidth + 'px',
           'data-sizes': imageWidth + 'px',
-        });
+        }).addClass(imageClass);
+
+        $('head').append('<style type="text/css">img.' + imageClass + '{ height: ' + imageHeight + 'px; width: ' + imageWidth + 'px; }</style>');
 
         x += imageWidth + nonContentWidth;
       });
 
-      x = -nonContentWidth / 2;
-      y += rowHeight;
+      x = nonContentWidth / 2;
+      y += rowHeight + nonContentWidth / 2;
     });
 
     this._$grid.addClass('grid--ready').height(y);
@@ -109,8 +110,8 @@ export default class Grid {
   _getGridData($grid) {
     const images = [];
 
-    $grid.find('.js-grid-item-container').each((item, index) => {
-      const $item = $(this);
+    $grid.find('.js-grid-item-container').each((index, item) => {
+      const $item = $(item);
       const height = $item.height();
       const width = $item.width();
 

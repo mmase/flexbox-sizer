@@ -1,7 +1,4 @@
-# Grid
-
-A component, which creates a grid of photos.
-
+# flexbox-sizer
 
 ## License
 

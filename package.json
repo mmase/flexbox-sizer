@@ -1,7 +1,7 @@
 {
-  "name": "grid",
-  "version": "1.0.0",
-  "description": "Photo grid",
+  "name": "flexbox-sizer",
+  "version": "0.0.0",
+  "description": "Flexbox sizer",
   "main": "src",
   "scripts": {
     "test": "npm run eslint && npm run karma -- --single-run",

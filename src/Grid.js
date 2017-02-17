@@ -55,10 +55,6 @@ export default class Grid {
     return images;
   }
 
-  _disableFlexbox($grid) {
-    $grid.css('display', 'block').addClass('grid--ready');
-  }
-
   _recalcWidths($grid, gridWidth) {
     const images = this._gridData;
     const maxModifier = 2;

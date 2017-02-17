@@ -8,37 +8,6 @@
     "node": true,
   },
   "globals": {
-    "require": false,
-    "requirejs": false,
-    "define": false,
-    "jasmine": false,
-    "beforeAll": false,
-    "afterAll": false,
-    "beforeEach": false,
-    "afterEach": false,
-    "describe": false,
-    "it": false,
-    "xdescribe": false,
-    "xit": false,
-    "expect": false,
-    "spyOn": false,
-    "spyOnEvent": false,
-    "mostRecentAjaxRequest": false,
-    "ajaxRequests": false,
-    "clearAjaxRequests": false,
     "loadFixtures": false,
-    "loadStyleFixtures": false,
-    "setStyleFixtures": false,
-    "setFixtures": false,
-    "AsyncSpec": false,
-    "waits": false,
-    "waitsFor": false,
-    "runs": false,
-    "browser": false
-  },
-  "rules": {
-    "no-alert": "off",
-    "no-console": "off",
-    "max-statements": "off"
   }
 }

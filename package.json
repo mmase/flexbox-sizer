@@ -1,0 +1,37 @@
+{
+  "name": "grid",
+  "version": "1.0.0",
+  "description": "Photo grid",
+  "main": "src",
+  "scripts": {
+    "test": "npm run eslint && npm run karma -- --single-run",
+    "karma": "env NODE_ENV=test karma start test/karma.conf.js",
+    "eslint": "eslint 'src/**/*.js' test/**/*.js '*.js'"
+  },
+  "author": "Michael Mase <mase@adobe.com>",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-behance": "^6.0.0",
+    "es6-shim": "^0.35.3",
+    "eslint": "^3.15.0",
+    "eslint-plugin-behance": "^1.1.0",
+    "eslint-preset-behance": "^6.0.0",
+    "jasmine-core": "^2.5.2",
+    "jasmine-fixture": "^2.0.0",
+    "jasmine-jquery": "^2.1.1",
+    "jquery": "jquery/jquery#1.10.2",
+    "karma": "^1.4.1",
+    "karma-coverage": "^1.1.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^2.0.2",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "jquery": "jquery/jquery#1.10.2"
+  }
+}

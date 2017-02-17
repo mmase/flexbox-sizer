@@ -42,7 +42,7 @@ export default class Grid {
       width -= borderWidth;
       height -= borderWidth;
 
-      const flexWidth = parseFloat($item.css('flex-grow'));
+      const flexWidth = $item.data('flex-grow');
       const flexHeight = Math.round(flexWidth / width * height);
 
       images.push({
@@ -59,6 +59,7 @@ export default class Grid {
   _recalcWidths($grid, gridWidth) {
     const images = this._gridData;
     const maxModifier = 2;
+    const maxFallbackRatio = 2.5;
     const { flexModifier, averageRowHeight } = this._getGridModifierData(images, gridWidth, maxModifier);
     const modifierExists = flexModifier < maxModifier;
 
@@ -69,7 +70,7 @@ export default class Grid {
       // we will insert a spacer at the end of the last row.
     const lastImageActualHeight = $grid.find('.js-grid-item-container').last().height();
 
-    this._toggleGridSpacer($grid, !modifierExists || lastImageActualHeight / averageRowHeight > this._maxRatio);
+    this._toggleGridSpacer($grid, !modifierExists || lastImageActualHeight / averageRowHeight > maxFallbackRatio);
       // We need to set the appropriate "sizes" with on the images
       // so the minimum required sized asset is loaded
     this._setImageSizes(images);

@@ -8,6 +8,14 @@ export default class Controller {
     this._create(config);
   }
 
+  // TODO: Needs tests
+  refresh() {
+    this.grids.forEach((grid) => {
+      grid._setGridData();
+      grid._autoSizeGrid();
+    });
+  }
+
   destroy() {
     this.grids.forEach((grid) => grid.destroy());
   }

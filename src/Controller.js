@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import Grid from './Grid';
+import _assign from 'lodash.assign';
 
 export default class Controller {
   constructor(config) {
@@ -25,7 +26,7 @@ export default class Controller {
   }
 
   static init(config) {
-    return new Controller(Object.assign({
+    return new Controller(_assign({
       window,
       context: document.body,
       gridSelector: '.js-grid-main',

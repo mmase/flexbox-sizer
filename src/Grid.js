@@ -36,19 +36,17 @@ export default class Grid {
 
     $grid.find('.js-grid-item-container').each(function() {
       const $item = $(this);
-      const borderWidth = $item.outerWidth(true) - $item.innerWidth();
+      const height = $item.height();
+      const width = $item.width();
 
-      let { height, width } = this.getBoundingClientRect();
-      width -= borderWidth;
-      height -= borderWidth;
-
+      const nonContentWidth = $item.outerWidth(true) - width;
       const flexWidth = $item.data('flex-grow');
-      const flexHeight = Math.round(flexWidth / width * height);
+      const flexHeight = Math.round(flexWidth * height / width);
 
       images.push({
         $item,
         flexWidth,
-        borderWidth,
+        nonContentWidth,
         flexHeight,
       });
     });
@@ -156,7 +154,7 @@ export default class Grid {
     }
 
     images.forEach((image) => {
-      const modifiedFlexWidth = flexModifier * image.flexWidth + image.borderWidth;
+      const modifiedFlexWidth = flexModifier * image.flexWidth + image.nonContentWidth;
       const modifiedFlexHeight = flexModifier * image.flexHeight;
 
       if (remaining >= modifiedFlexWidth) {
@@ -182,10 +180,9 @@ export default class Grid {
     images.forEach(({ $item, flexWidth }) => {
       const newFlexWidth = flexModifier * flexWidth;
 
-      $item.css({
-        width: newFlexWidth,
-        flexGrow: `${newFlexWidth}`,
-      });
+      $item.width(newFlexWidth);
+
+      $item.css('flexGrow', `${newFlexWidth}`);
     });
   }
 

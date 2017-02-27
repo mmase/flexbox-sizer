@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npm run eslint && npm run karma -- --single-run",
     "karma": "env NODE_ENV=test karma start test/karma.conf.js",
-    "eslint": "eslint 'src/**/*.js' test/**/*.js '*.js'"
+    "eslint": "eslint 'src/**/*.js' test/**/*.js '*.js'",
+    "examples": "webpack-dev-server --content-base examples --config webpack.config.js --entry ./examples/"
   },
   "author": "Michael Mase <mase@adobe.com>",
   "license": "Apache-2.0",
@@ -29,7 +30,8 @@
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.2",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
     "jquery": "jquery/jquery#1.10.2"

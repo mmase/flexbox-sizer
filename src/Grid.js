@@ -112,7 +112,7 @@ export default class Grid {
     images.forEach(({ $item }) => {
       const width = $item.width();
 
-      $item.find('.js-grid__item-image').attr({
+      $item.find('img').attr({
         sizes: width + 'px',
         'data-sizes': width + 'px',
       });

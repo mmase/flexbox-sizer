@@ -64,25 +64,27 @@ export default class Grid {
     const modifierExists = flexModifier < maxModifier;
 
     this._adjustWidths(images, modifierExists ? flexModifier : 1);
-      // Because we can't always calculate the grid perfectly, we must check
-      // the actual rendered height of the last image to make sure that it truly was
-      // rendered close to the average row height. If it is not below the maxRatio,
-      // we will insert a spacer at the end of the last row.
-    const lastImageActualHeight = $grid.find('.js-grid-item-container').last().height();
 
+    // @todo: needs tests
+    // The grid isn't always calculated perfectly, so check the actual rendered height of the last image to make sure that it
+    // truly was rendered close to the average row height. If it is not below the maxRatio, insert a spacer at the end of the last row.
+    // Remove the grid spacer before measuring whether the last row is correctly rendered, otherwise flapping will occur.
+    this._toggleGridSpacer($grid, false);
+    const lastImageActualHeight = $grid.find('.js-grid-item-container').last().height();
     this._toggleGridSpacer($grid, !modifierExists || lastImageActualHeight / averageRowHeight > maxFallbackRatio);
-      // We need to set the appropriate "sizes" with on the images
-      // so the minimum required sized asset is loaded
+
+    // We need to set the appropriate "sizes" with on the images
+    // so the minimum required sized asset is loaded
     this._setImageSizes(images);
 
     $grid.addClass('grid--ready');
   }
 
   _getGridModifierData(images, gridWidth, maxModifier) {
-      // The flexModifier starts at 1, which initially renders the grid images with
-      // the flex-grow value provided by the server. This function oscillates
-      // this modifier by the flexGrowth value until the while loop is satisfied;
-      // ultimately creating a last row of average height.
+    // The flexModifier starts at 1, which initially renders the grid images with
+    // the flex-grow value provided by the server. This function oscillates
+    // this modifier by the flexGrowth value until the while loop is satisfied;
+    // ultimately creating a last row of average height.
     let flexModifier = 1;
     let flexGrowth = 0;
     let last = 2;
@@ -107,7 +109,7 @@ export default class Grid {
   }
 
   _setImageSizes(images) {
-    images.forEach(function({ $item }) {
+    images.forEach(({ $item }) => {
       const width = $item.width();
 
       $item.find('.js-grid__item-image').attr({
@@ -130,7 +132,7 @@ export default class Grid {
 
     function finalizeCurrentRow() {
       let rowDimensions = [];
-      let sumOfFlexWidths = currentRow.reduce(function(a, b) {
+      let sumOfFlexWidths = currentRow.reduce((a, b) => {
         return a + b.modifiedFlexWidth;
       }, 0);
 

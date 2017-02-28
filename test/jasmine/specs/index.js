@@ -8,6 +8,7 @@ describe('Grid', function() {
     this.$context = $('.js-project');
     this.$window = $('.js-window');
     this.$grid = this.$context.find('.js-grid-main');
+    this.$gridItems = this.$grid.find('.js-grid-item-container');
   });
 
   afterEach(function() {
@@ -41,7 +42,6 @@ describe('Grid', function() {
   describe('rendering', function() {
     it('resizes the grid so the height of the last row is acceptable', function() {
       const maxRatio = 1.5;
-      const $gridItems = this.$grid.find('.js-grid-item-container');
 
       let rowHeights;
 
@@ -53,7 +53,7 @@ describe('Grid', function() {
       }
 
       // Uncomment when PhantomJS supports flexbox
-      // rowHeights = getRowHeights($gridItems);
+      // rowHeights = getRowHeights(this.$gridItems);
       // expect(rowHeights.last / rowHeights.first).toBeGreaterThan(maxRatio);
 
       this._grid = Grid.init({
@@ -62,8 +62,49 @@ describe('Grid', function() {
         maxRatio,
       });
 
-      rowHeights = getRowHeights($gridItems);
+      rowHeights = getRowHeights(this.$gridItems);
       expect(rowHeights.last / rowHeights.first).toBeLessThan(maxRatio);
+    });
+  });
+
+  describe('breakpoints', function() {
+    it('uses default flex-grow when no breakpoints are provided', function() {
+      this._grid = Grid.init({
+        context: this.$context[0],
+        window: this.$window[0],
+        breakpoints: [],
+      });
+
+      const expectedBeforeResize = 140;
+      const expectedAfterResize = 133;
+
+      expect(this.$gridItems.eq(0).width()).toBeLessThan(expectedBeforeResize);
+
+      this.$grid.width(600);
+      this.$window.trigger('resize');
+
+      expect(this.$gridItems.eq(0).width()).toBe(expectedAfterResize);
+    });
+
+    it('uses a scaled flex-grow when breakpoints are provided', function() {
+      this._grid = Grid.init({
+        context: this.$context[0],
+        window: this.$window[0],
+        breakpoints: [{
+          width: this.$grid.width(),
+          modifier: .1,
+        }],
+      });
+
+      const expectedBeforeResize = 140;
+      const expectedAfterResize = 3;
+
+      expect(this.$gridItems.eq(0).width()).toBeLessThan(expectedBeforeResize);
+
+      this.$grid.width(600);
+      this.$window.trigger('resize');
+
+      expect(this.$gridItems.eq(0).width()).toBe(expectedAfterResize);
     });
   });
 });

@@ -1,16 +1,20 @@
 import $ from 'jquery';
 
 export default class Grid {
-  constructor($grid, index, config) {
+  constructor($grid, index, { window, maxRatio, breakpoints }) {
     this._$grid = $grid;
     this._index = index;
-    this._$window = $(config.window);
-    this._maxRatio = config.maxRatio;
+    this._$window = $(window);
+    this._maxRatio = maxRatio;
+    this._breakpoints = breakpoints;
 
-    this._setGridData();
-
-    this._autoSizeGrid();
+    this.refresh();
     this._bind();
+  }
+
+  refresh() {
+    this._setGridData();
+    this._autoSizeGrid();
   }
 
   destroy() {
@@ -19,6 +23,14 @@ export default class Grid {
 
   _bind() {
     this._$window.on('resize.grid-' + this._index, () => this._autoSizeGrid());
+  }
+
+  _getBreakpointModifier(gridWidth) {
+    const { modifier } = this._breakpoints.reduce((minBreakpoint, cur) => {
+      return cur.width >= gridWidth && cur.width < minBreakpoint.width ? cur : minBreakpoint;
+    }, { width: Infinity, modifier: 1 });
+
+    return modifier;
   }
 
   _autoSizeGrid() {
@@ -79,6 +91,7 @@ export default class Grid {
   }
 
   _getGridModifierData(images, gridWidth, maxModifier) {
+    const breakpointModifier = this._getBreakpointModifier(gridWidth);
     // The flexModifier starts at 1, which initially renders the grid images with
     // the flex-grow value provided by the server. This function oscillates
     // this modifier by the flexGrowth value until the while loop is satisfied;
@@ -93,7 +106,7 @@ export default class Grid {
 
     while (last / averageRowHeight > this._maxRatio && flexModifier < maxModifier) {
       direction *= -1;
-      flexModifier = 1 + (flexGrowth * direction);
+      flexModifier = (1 + (flexGrowth * direction)) * breakpointModifier;
       rowHeights = this._getRowHeights(images, gridWidth, flexModifier);
       [last, ...rest] = rowHeights.reverse();
       averageRowHeight = rest.reduce((sum, height) => sum + height, 0) / rest.length;

@@ -1,0 +1,43 @@
+* {
+  border-radius: 3px;
+  box-sizing: border-box;
+  font-family: Avenir, sans-serif;
+}
+
+h3 {
+  padding: 20px 0 0 20px;
+  text-align: center;
+}
+
+.project {
+  background: lavender;
+  margin: 0 auto;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.grid-item {
+  display: inline-block;
+  border: 5px solid transparent;
+  position: relative;
+}
+
+.grid-item-fill {
+  background: rebeccapurple;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.grid-item span {
+  display: block;
+}
+
+.grid__item-spacer {
+  flex-grow: 9e9;
+}

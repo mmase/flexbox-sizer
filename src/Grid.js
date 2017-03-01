@@ -54,10 +54,16 @@ export default class Grid {
 
   _autoSizeStaticGrid() {
     const images = this._gridData;
+
+    if (!images.length) {
+      return;
+    }
+
     const gridWidth = this._$grid.width();
     const flexModifier = this._getGridModifierData(images, gridWidth, this.maxModifier).flexModifier;
     const gridDimensions = this._getGridDimensions(images, gridWidth, flexModifier);
     const nonContentWidth = images[0].nonContentWidth;
+    const styleClass = 'grid-style-' + Math.random().toString(36).substring(7);
 
     let x = nonContentWidth / 2;
     let y = nonContentWidth / 2;
@@ -87,7 +93,7 @@ export default class Grid {
           'data-sizes': imageWidth + 'px',
         }).addClass(imageClass);
 
-        $('head').append('<style type="text/css">img.' + imageClass + '{ height: ' + imageHeight + 'px; width: ' + imageWidth + 'px; }</style>');
+        $('head').append('<style class="grid-style ' + styleClass + '" type="text/css">img.' + imageClass + '{ height: ' + imageHeight + 'px; width: ' + imageWidth + 'px; }</style>');
 
         x += imageWidth + nonContentWidth;
       });
@@ -95,6 +101,8 @@ export default class Grid {
       x = nonContentWidth / 2;
       y += rowHeight + nonContentWidth / 2;
     });
+
+    $('style.grid-style:not(".' + styleClass + '")').remove();
 
     this._$grid.addClass('grid--ready').height(y);
   }

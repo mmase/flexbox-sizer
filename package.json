@@ -1,6 +1,6 @@
 {
   "name": "flexbox-sizer",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Flexbox sizer",
   "main": "src",
   "scripts": {

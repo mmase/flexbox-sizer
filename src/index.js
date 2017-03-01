@@ -23,6 +23,10 @@ export default class Controller {
       maxRatio: 1.5,
       breakpoints: [
         {
+          width: 1325,
+          modifier: 220 / 260,
+        },
+        {
           width: 1024,
           modifier: 170 / 260,
         },

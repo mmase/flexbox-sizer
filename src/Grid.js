@@ -18,10 +18,12 @@ export default class Grid {
   }
 
   destroy() {
+    this._$window.off('refresh-grids.grid-' + this._index);
     this._$window.off('.grid-' + this._index);
   }
 
   _bind() {
+    this._$window.on('refresh-grids.grid-' + this._index, () => this.refresh());
     this._$window.on('resize.grid-' + this._index, () => this._autoSizeGrid());
   }
 

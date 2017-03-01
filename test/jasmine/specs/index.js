@@ -37,6 +37,19 @@ describe('Grid', function() {
 
       expect(this._grid.grids[0]._autoSizeGrid).toHaveBeenCalled();
     });
+
+    it('bind a window "refresh-grid" handler for every grid found in the context', function() {
+      this._grid = Grid.init({
+        context: this.$context[0],
+        window: this.$window[0],
+      });
+
+      spyOn(this._grid.grids[0], 'refresh');
+
+      this.$window.trigger('refresh-grids');
+
+      expect(this._grid.grids[0].refresh).toHaveBeenCalled();
+    });
   });
 
   describe('rendering', function() {

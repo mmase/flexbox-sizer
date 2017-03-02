@@ -50,9 +50,8 @@ export default class Grid {
 
     $grid.find('.js-grid-item-container').each(function() {
       const $item = $(this);
-      const height = $item.height();
-      const width = $item.width();
-
+      const height = $item.data('height') || $item.height();
+      const width = $item.data('width') || $item.width();
       const nonContentWidth = $item.outerWidth(true) - width;
       const flexWidth = $item.data('flex-grow');
       const flexHeight = Math.round(flexWidth * height / width);
